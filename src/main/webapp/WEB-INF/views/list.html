@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a href="/products/create">create</a>
+<form action="">
+    <form action="">
+        <input type="text" name="key">
+        <button>sắp xếp</button>
+    </form>
+    <form action="">
+        <input type="text" placeholder="nhập tên" name="key">
+        <button >tìm</button>
+    </form>
+</form>
+<table border="1">
+    <tr>
+        <th>name</th>
+        <th>price</th>
+        <th>category</th>
+        <th>edit</th>
+        <th>delete</th>
+    </tr>
+    <th:block th:each="product : ${products}">
+        <tr>
+            <td th:text="${product.getName()}"></td>
+            <td th:text="${product.getPrice()}"></td>
+            <td th:text="${product.getCategory.getName()}"></td>
+            <td><a th:href="@{/products/edit/__${product.getId()}__}">edit</a></td>
+            <td><a th:href="@{/products/delete/__${product.getId()}__}">delete</a></td>
+        </tr>
+    </th:block>
+</table>
+</body>
+</html>
