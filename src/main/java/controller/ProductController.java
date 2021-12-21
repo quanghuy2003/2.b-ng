@@ -78,7 +78,7 @@ public class ProductController {
     public String showSort(Model model, String key) {
         List<Product> productList;
         productList = (List<Product>) productService.findAllByOrderByName();
-        model.addAttribute("product",productList);
+        model.addAttribute("products",productList);
         return "/list";
     }
 }
