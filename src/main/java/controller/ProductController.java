@@ -4,22 +4,32 @@ package controller;
 import model.Category;
 import model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import service.ICategoryService;
 import service.IProductService;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/products")
 public class ProductController {
+
+    @Value("${file-upload}")
+    private String fileUpload;
+
     @Autowired
     private IProductService productService;
 
@@ -31,13 +41,32 @@ public class ProductController {
         return categoryService.findAll();
     }
 
-    @GetMapping("/create")
-    public String showFormCreate() {
+//    @GetMapping("/create")
+//    public String showFormCreate() {
+//        return "/create";
+//    }
+//
+//    @PostMapping("/create")
+//    public String create(Product product) {
+//        productService.save(product);
+//        return "redirect:/products";
+//    }
+
+    @GetMapping("create")
+    public String showCreate(Model model) {
+        model.addAttribute("product",new Product());
         return "/create";
     }
-
-    @PostMapping("/create")
-    public String create(Product product) {
+    @PostMapping("create")
+    public String createProduct(Product product, @RequestParam MultipartFile image) {
+        String fileName = image.getOriginalFilename();
+        try {
+            FileCopyUtils.copy(image.getBytes(),
+                    new File("D:\\test\\" + fileName));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        product.setImg(fileName);
         productService.save(product);
         return "redirect:/products";
     }
@@ -99,6 +128,29 @@ public class ProductController {
         }
         ModelAndView modelAndView = new ModelAndView("/list");
         modelAndView.addObject("products",products);
+        return modelAndView;
+    }
+
+    @GetMapping("/upload")
+    public ModelAndView showCreateIMG() {
+        ModelAndView modelAndView = new ModelAndView("/createIMG");
+        return modelAndView;
+    }
+
+
+    @PostMapping("/show")
+    public ModelAndView saveIMG( MultipartFile image, String imageLink) {
+        String fileName = image.getOriginalFilename();
+        try {
+            FileCopyUtils.copy(image.getBytes(),
+                    new File("/D:\\test\\/" + fileName)); // coppy ảnh từ ảnh nhận được vào thư mục quy định,
+            // đường dẫn ảo là /nhuanh/
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        ModelAndView modelAndView = new ModelAndView("/index2");
+        modelAndView.addObject("src", fileName);
+        modelAndView.addObject("srcImg", imageLink);
         return modelAndView;
     }
 

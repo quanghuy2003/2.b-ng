@@ -13,6 +13,14 @@
     <select name="category">
         <option th:each="cate : ${category}" th:value="${cate.getId()}" th:text="${cate.getName()}"></option>
     </select>
+    <div>
+        <label>Image</label>
+        <input type="file" name="image"/>
+    </div>
+    <div>
+        <label>Image Link</label>
+        <input type="text" name="imageLink"/>
+    </div>
     <button> edit</button>
 </form>
 </body>

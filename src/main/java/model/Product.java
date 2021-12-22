@@ -10,6 +10,7 @@ public class Product {
     private Long id;
     private String name;
     private int price;
+    private String img;
 
     @ManyToOne
     private Category category;
@@ -18,10 +19,25 @@ public class Product {
     public Product() {
     }
 
+    public Product(String name, int price, String img, Category category) {
+        this.name = name;
+        this.price = price;
+        this.img = img;
+        this.category = category;
+    }
+
     public Product(Long id, String name, int price) {
         this.id = id;
         this.name = name;
         this.price = price;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public Long getId() {

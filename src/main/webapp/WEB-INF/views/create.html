@@ -9,7 +9,7 @@
 <p>
     <a href="/products">product list</a>
 </p>
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
     <table>
         <tr>
             <td><input type="text" name="name"/></td>
@@ -20,9 +20,22 @@
         <select name="category">
             <option th:each="cate : ${category}" th:value="${cate.getId()}" th:text="${cate.getName()}"></option>
         </select>
-        <tr>
-            <td><input type="submit" value="Create product"></td>
-        </tr>
+
+
+                <div>
+                    <label>Image</label>
+                    <input type="file" name="image"/>
+                </div>
+                <div>
+                    <label>Image Link</label>
+                    <input type="text" name="imageLink"/>
+                </div>
+                <button> create</button>
+<!--                <input type="submit" value="Save"/>-->
+
+<!--        <tr>-->
+<!--            <td><input type="submit" value="Create product"></td>-->
+<!--        </tr>-->
     </table>
 </form>
 </body>
