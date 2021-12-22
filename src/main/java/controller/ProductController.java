@@ -4,6 +4,9 @@ package controller;
 import model.Category;
 import model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,20 +42,20 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    @GetMapping("")
-    public String showList(Model model, String key) {
-//        Iterable<Product> productIterable = productService.findAll();
-//        model.addAttribute("products", productIterable);
+//    @GetMapping("")
+//    public String showList(Model model, String key) {
+////        Iterable<Product> productIterable = productService.findAll();
+////        model.addAttribute("products", productIterable);
+////        return "/list";
+//        List<Product> productList;
+//        if (key != null) {
+//            productList = (List<Product>) productService.findByName(key);
+//        } else {
+//            productList = (List<Product>) productService.findAll();
+//        }
+//        model.addAttribute("products", productList);
 //        return "/list";
-        List<Product> productList;
-        if (key != null) {
-            productList = (List<Product>) productService.findByName(key);
-        } else {
-            productList = (List<Product>) productService.findAll();
-        }
-        model.addAttribute("products", productList);
-        return "/list";
-    }
+//    }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
@@ -81,4 +84,22 @@ public class ProductController {
         model.addAttribute("products",productList);
         return "/list";
     }
+
+    @GetMapping("")
+    public ModelAndView listProducts(@RequestParam("search") Optional<String> search,@PageableDefault(value = 5) Pageable pageable){
+//        Page<Product> products= productService.findAll(pageable);
+//        ModelAndView modelAndView = new ModelAndView("/list");
+//        modelAndView.addObject("products",products);
+//        return modelAndView;
+        Page<Product>products;
+        if (search.isPresent()){
+            products=productService.findAllByNameContaining(search.get(),pageable);
+        }else {
+            products=productService.findAll(pageable);
+        }
+        ModelAndView modelAndView = new ModelAndView("/list");
+        modelAndView.addObject("products",products);
+        return modelAndView;
+    }
+
 }

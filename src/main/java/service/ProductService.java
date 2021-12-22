@@ -2,6 +2,8 @@ package service;
 
 import model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import repository.IProductRepository;
 
 import java.util.Optional;
@@ -38,5 +40,15 @@ private IProductRepository iProductRepository;
     @Override
     public Iterable<Product> findAllByOrderByName() {
         return iProductRepository.findAllByOrderByName();
+    }
+
+    @Override
+    public Page<Product> findAll(Pageable pageable) {
+        return iProductRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Product> findAllByNameContaining(String name, Pageable pageable) {
+        return iProductRepository.findAllByNameContaining(name,pageable);
     }
 }
